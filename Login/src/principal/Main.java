@@ -175,16 +175,7 @@ public class Main extends JFrame {
 	private class LblEnterMouseListener extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			passwordFieldPass.setFocusable(false);
-			textFieldUser.setFocusable(false);
-			password = String.valueOf(passwordFieldPass.getPassword());
-			if ((password.equals("Insert Pass...") && passwordFieldPass.getEchoChar() != '●')
-					|| textFieldUser.getText().equalsIgnoreCase("Insert User...")) {
-				JOptionPane.showMessageDialog(rootPane, "Debe rellenar todos los campos antes de proceder al login.",
-						"Error", 0);
-			} else {
-				JOptionPane.showMessageDialog(rootPane, "¡Usuario loggeado con éxito!", "Login", 1);
-			}
+			login();
 		}
 	}
 
@@ -218,33 +209,30 @@ public class Main extends JFrame {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				passwordFieldPass.setFocusable(false);
-				textFieldUser.setFocusable(false);
-				password = String.valueOf(passwordFieldPass.getPassword());
-				if ((password.equals("Insert Pass...") && passwordFieldPass.getEchoChar() != '●')
-						|| textFieldUser.getText().equalsIgnoreCase("Insert User...")) {
-					JOptionPane.showMessageDialog(rootPane, "Debe rellenar todos los campos antes de proceder al login.",
-							"Error", 0);
-				} else {
-					JOptionPane.showMessageDialog(rootPane, "¡Usuario loggeado con éxito!", "Login", 1);
-				}
+				login();
 			}
 		}
 	}
+	
+	private void login() {
+		passwordFieldPass.setFocusable(false);
+		textFieldUser.setFocusable(false);
+		password = String.valueOf(passwordFieldPass.getPassword());
+		if ((password.equals("Insert Pass...") && passwordFieldPass.getEchoChar() != '●')
+				|| textFieldUser.getText().equalsIgnoreCase("Insert User...") || password.isEmpty()
+				|| textFieldUser.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(rootPane,
+					"Debe rellenar todos los campos antes de proceder al login.", "Error", 0);
+		} else {
+			JOptionPane.showMessageDialog(rootPane, "¡Usuario loggeado con éxito!", "Login", 1);
+		}
+	}
+
 	private class PasswordFieldPassKeyListener extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				passwordFieldPass.setFocusable(false);
-				textFieldUser.setFocusable(false);
-				password = String.valueOf(passwordFieldPass.getPassword());
-				if ((password.equals("Insert Pass...") && passwordFieldPass.getEchoChar() != '●')
-						|| textFieldUser.getText().equalsIgnoreCase("Insert User...")) {
-					JOptionPane.showMessageDialog(rootPane, "Debe rellenar todos los campos antes de proceder al login.",
-							"Error", 0);
-				} else {
-					JOptionPane.showMessageDialog(rootPane, "¡Usuario loggeado con éxito!", "Login", 1);
-				}
+				login();
 			}
 		}
 	}
