@@ -225,6 +225,9 @@ public class Main extends JFrame {
 					"Debe rellenar todos los campos antes de proceder al login.", "Error", 0);
 		} else {
 			JOptionPane.showMessageDialog(rootPane, "¡Usuario loggeado con éxito!", "Login", 1);
+//			Menu nueva = new Menu();
+//			nueva.setVisible(true);
+//			dispose();
 		}
 	}
 
