@@ -1,6 +1,5 @@
 package principal;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,11 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JPasswordField;
-import javax.swing.border.BevelBorder;
-import javax.swing.JButton;
 import java.awt.Cursor;
 import javax.swing.SwingConstants;
 import java.awt.Font;
@@ -23,11 +19,6 @@ import java.awt.event.MouseEvent;
 import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.Window.Type;
-import java.awt.Frame;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.MatteBorder;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -79,6 +70,7 @@ public class Main extends JFrame {
 		contentPane.add(lblExit);
 
 		lblEnter = new JLabel("");
+		lblEnter.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEnter.addMouseListener(new LblEnterMouseListener());
 		lblEnter.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblEnter.setBounds(151, 280, 51, 49);
@@ -177,6 +169,19 @@ public class Main extends JFrame {
 		public void mouseClicked(MouseEvent e) {
 			login();
 		}
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			password = String.valueOf(passwordFieldPass.getPassword());
+			if ((password.equals("Insert Pass...") && passwordFieldPass.getEchoChar() != '●')
+				|| textFieldUser.getText().equalsIgnoreCase("Insert User...") || password.isEmpty()
+				|| textFieldUser.getText().isEmpty()) {
+				lblEnter.setIcon(new ImageIcon("./recursos/cancel.png"));
+			}
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			lblEnter.setIcon(new ImageIcon());
+		}
 	}
 
 	private class TextFieldUserMouseListener extends MouseAdapter {
@@ -225,9 +230,9 @@ public class Main extends JFrame {
 					"Debe rellenar todos los campos antes de proceder al login.", "Error", 0);
 		} else {
 			JOptionPane.showMessageDialog(rootPane, "¡Usuario loggeado con éxito!", "Login", 1);
-//			Menu nueva = new Menu();
-//			nueva.setVisible(true);
-//			dispose();
+			User userFrame = new User(textFieldUser.getText());
+			userFrame.setVisible(true);
+			dispose();
 		}
 	}
 
