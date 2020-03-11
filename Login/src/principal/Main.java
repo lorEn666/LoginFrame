@@ -10,6 +10,9 @@ import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
+
+import clases.IoDatos;
+
 import javax.swing.JPasswordField;
 import java.awt.Cursor;
 import javax.swing.SwingConstants;
@@ -228,11 +231,13 @@ public class Main extends JFrame {
 				|| textFieldUser.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(rootPane,
 					"Debe rellenar todos los campos antes de proceder al login.", "Error", 0);
-		} else {
+		} else if (IoDatos.verificarLogin(textFieldUser.getText(), password)) {
 			JOptionPane.showMessageDialog(rootPane, "¡Usuario loggeado con éxito!", "Login", 1);
 			User userFrame = new User(textFieldUser.getText());
 			userFrame.setVisible(true);
 			dispose();
+		} else {
+			JOptionPane.showMessageDialog(rootPane, "Usuario o contraseña incorrectos", "Error", 0);
 		}
 	}
 
