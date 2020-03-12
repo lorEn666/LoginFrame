@@ -1,6 +1,8 @@
 package clases;
 
-public class Contacto {
+import java.io.Serializable;
+
+public class Contacto implements Serializable{
 	private String nombre;
 	private int telefono;
 
@@ -8,9 +10,13 @@ public class Contacto {
 		this.nombre = nombre;
 		this.telefono = telefono;
 	}
+	
+	public String getNombre() {
+		return nombre;
+	}
 
 	@Override
 	public String toString() {
-		return nombre + "\t" + telefono;
+		return nombre + "    " + telefono;
 	}
 }

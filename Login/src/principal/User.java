@@ -19,6 +19,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.awt.Cursor;
 import javax.swing.JButton;
 import javax.swing.border.SoftBevelBorder;
@@ -32,6 +33,10 @@ import clases.IoDatos;
 
 import javax.swing.JTextArea;
 import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import javax.swing.JTextField;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class User extends JFrame {
 
@@ -41,9 +46,12 @@ public class User extends JFrame {
 	private JLabel lblReturn;
 	private JLabel lblAgenda;
 	private JList listContactos;
+	private DefaultListModel modeloLista;
+	private DefaultListModel modeloBusqueda;
 	private ArrayList<Contacto> vContacto;
 	private JLabel lblRemove;
 	private JLabel lblAdd;
+	private JTextField textBusqueda;
 
 	/**
 	 * Launch the application.
@@ -85,22 +93,30 @@ public class User extends JFrame {
 		lblAgenda.addMouseListener(new LblAgendaMouseListener());
 
 		listContactos = new JList();
+		listContactos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listContactos.setVisible(false);
-		
+
 		lblRemove = new JLabel("");
 		lblRemove.setToolTipText("Eliminar");
 		lblRemove.addMouseListener(new LblRemoveMouseListener());
 		lblRemove.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRemove.setHorizontalTextPosition(SwingConstants.CENTER);
-		lblRemove.setIcon(new ImageIcon("C:\\Users\\MICAELA\\git\\LoginFrame\\Login\\recursos\\delete1.png"));
+		lblRemove.setIcon(new ImageIcon(".\\recursos\\delete1.png"));
 		lblRemove.setVisible(false);
-		
+
 		lblAdd = new JLabel("");
 		lblAdd.setToolTipText("A\u00F1adir");
 		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAdd.addMouseListener(new LblAddMouseListener());
-		lblAdd.setIcon(new ImageIcon("C:\\Users\\MICAELA\\git\\LoginFrame\\Login\\recursos\\add1.png"));
+		lblAdd.setIcon(new ImageIcon(".\\recursos\\add1.png"));
 		lblAdd.setVisible(false);
+
+		textBusqueda = new JTextField();
+		textBusqueda.setVisible(false);
+		textBusqueda.addKeyListener(new TextFieldKeyListener());
+		textBusqueda.setBounds(138, 71, 86, 20);
+		contentPane.add(textBusqueda);
+		textBusqueda.setColumns(10);
 		lblAdd.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAdd.setBounds(123, 363, 52, 52);
@@ -134,10 +150,12 @@ public class User extends JFrame {
 		lblFondo.setBounds(0, 0, 349, 429);
 		setShape(new RoundRectangle2D.Double(0, 0, lblFondo.getWidth(), lblFondo.getHeight(), 50, 50));
 		contentPane.add(lblFondo);
-		DefaultListModel modeloLista = new DefaultListModel();
+		modeloLista = new DefaultListModel();
+		modeloBusqueda = new DefaultListModel();
 		listContactos.setModel(modeloLista);
-		
+
 		vContacto = IoDatos.inicioDeSesion(nombreUsuario);
+		actualizaJList();
 
 	}
 
@@ -154,6 +172,7 @@ public class User extends JFrame {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			IoDatos.cierreDeSesion(vContacto, lblNombreUsuario.getText());
 			dispose();
 			JOptionPane.showMessageDialog(rootPane, "Sesión cerrada.", "Sesión", 3);
 			Main loginFrame = new Main();
@@ -187,32 +206,85 @@ public class User extends JFrame {
 				lblAdd.setVisible(true);
 				lblRemove.setVisible(true);
 				listContactos.setVisible(true);
+				textBusqueda.setVisible(true);
+				listContactos.setOpaque(false);
 			} else {
 				lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda.png"));
 				lblAdd.setVisible(false);
 				lblRemove.setVisible(false);
 				listContactos.setVisible(false);
+				textBusqueda.setVisible(false);
 			}
 		}
 	}
+
 	private class LblAddMouseListener extends MouseAdapter {
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			lblAdd.setIcon(new ImageIcon(".\\recursos\\add2.png"));
 		}
+
 		@Override
 		public void mouseExited(MouseEvent e) {
 			lblAdd.setIcon(new ImageIcon(".\\recursos\\add1.png"));
 		}
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			String nombreContacto = JOptionPane.showInputDialog(rootPane, "Introduzca nombre del nuevo contacto:",
+					"Nuevo contacto", 3);
+			int telefonoContacto = Integer.valueOf(JOptionPane.showInputDialog(rootPane,
+					"Introduzca teléfono del nuevo contacto:", "Nuevo contacto", 3));
+			vContacto.add(new Contacto(nombreContacto, telefonoContacto));
+			JOptionPane.showMessageDialog(rootPane, "Contacto guardado con éxito.", "Nuevo contacto", 3);
+			actualizaJList();
+		}
 	}
+
 	private class LblRemoveMouseListener extends MouseAdapter {
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			lblRemove.setIcon(new ImageIcon(".\\recursos\\delete2.png"));
 		}
+
 		@Override
 		public void mouseExited(MouseEvent e) {
 			lblRemove.setIcon(new ImageIcon(".\\recursos\\delete1.png"));
+		}
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (listContactos.isSelectionEmpty()) {
+				JOptionPane.showMessageDialog(rootPane, "Debe seleccionar un contacto de la lista.", "Eliminar contacto", 1);
+				return;
+			}
+			vContacto.remove(listContactos.getSelectedIndex());
+			modeloLista.removeElementAt(listContactos.getSelectedIndex());
+			JOptionPane.showMessageDialog(rootPane, "Contacto borrado con éxito.", "Eliminar contacto", 1);
+		}
+	}
+
+	private class TextFieldKeyListener extends KeyAdapter {
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if (textBusqueda.getText().isEmpty()) {
+				listContactos.setModel(modeloLista);
+				return;
+			}
+			modeloBusqueda.removeAllElements();
+			listContactos.setModel(modeloBusqueda);
+			for (int i = 0; i < vContacto.size(); i++) {
+				if (vContacto.get(i).getNombre().substring(0, textBusqueda.getText().length())
+						.equals(textBusqueda.getText())) {
+					modeloBusqueda.addElement(vContacto.get(i));
+				}
+			}
+		}
+	}
+
+	private void actualizaJList() {
+		modeloLista.removeAllElements();
+		for (Iterator iterator = vContacto.iterator(); iterator.hasNext();) {
+			modeloLista.addElement(iterator.next().toString());
 		}
 	}
 }

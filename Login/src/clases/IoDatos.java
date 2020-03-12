@@ -3,8 +3,10 @@ package clases;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -45,5 +47,16 @@ public class IoDatos {
 		} catch (ClassNotFoundException e) {
 		}		
 		return vContacto;
+	}
+	
+	public static void cierreDeSesion(ArrayList vContacto, String usuario) {
+		File fichero = new File("./datos/" + usuario + ".dat");
+		try {
+			ObjectOutputStream guardarContactos = new ObjectOutputStream(new FileOutputStream(fichero));
+			guardarContactos.writeObject(vContacto);
+			guardarContactos.close();
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+		}
 	}
 }
