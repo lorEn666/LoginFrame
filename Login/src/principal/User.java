@@ -17,6 +17,7 @@ import java.awt.Color;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.awt.Cursor;
 import javax.swing.JButton;
@@ -39,10 +40,10 @@ public class User extends JFrame {
 	private JLabel lblNombreUsuario;
 	private JLabel lblReturn;
 	private JLabel lblAgenda;
-	private JButton btnAdd;
-	private JButton btnRemove;
 	private JList listContactos;
 	private ArrayList<Contacto> vContacto;
+	private JLabel lblRemove;
+	private JLabel lblAdd;
 
 	/**
 	 * Launch the application.
@@ -64,10 +65,11 @@ public class User extends JFrame {
 	 * Create the frame.
 	 */
 	public User(String nombreUsuario) {
+		setUndecorated(true);
 		setType(Type.UTILITY);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 359, 467);
+		setBounds(100, 100, 349, 429);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -82,35 +84,42 @@ public class User extends JFrame {
 		lblAgenda.setToolTipText("Contactos");
 		lblAgenda.addMouseListener(new LblAgendaMouseListener());
 
-		btnRemove = new JButton("-");
-		btnRemove.setVisible(false);
-
 		listContactos = new JList();
 		listContactos.setVisible(false);
+		
+		lblRemove = new JLabel("");
+		lblRemove.setToolTipText("Eliminar");
+		lblRemove.addMouseListener(new LblRemoveMouseListener());
+		lblRemove.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRemove.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblRemove.setIcon(new ImageIcon("C:\\Users\\MICAELA\\git\\LoginFrame\\Login\\recursos\\delete1.png"));
+		lblRemove.setVisible(false);
+		
+		lblAdd = new JLabel("");
+		lblAdd.setToolTipText("A\u00F1adir");
+		lblAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAdd.addMouseListener(new LblAddMouseListener());
+		lblAdd.setIcon(new ImageIcon("C:\\Users\\MICAELA\\git\\LoginFrame\\Login\\recursos\\add1.png"));
+		lblAdd.setVisible(false);
+		lblAdd.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblAdd.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAdd.setBounds(123, 363, 52, 52);
+		contentPane.add(lblAdd);
+		lblRemove.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblRemove.setBounds(172, 363, 52, 52);
+		contentPane.add(lblRemove);
 		listContactos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		listContactos.setBorder(null);
 		listContactos.setBounds(94, 101, 160, 259);
 		contentPane.add(listContactos);
-
-		btnRemove.setFont(new Font("Tahoma", Font.BOLD, 10));
-		btnRemove.setOpaque(false);
-		btnRemove.setBounds(292, 187, 45, 40);
-		contentPane.add(btnRemove);
-
-		btnAdd = new JButton("+");
-		btnAdd.setVisible(false);
-		btnAdd.setOpaque(false);
-		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnAdd.setBounds(10, 187, 45, 40);
-		contentPane.add(btnAdd);
 		lblAgenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda.png"));
 		lblAgenda.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAgenda.setBounds(141, 101, 66, 66);
+		lblAgenda.setBounds(273, 11, 66, 66);
 		contentPane.add(lblAgenda);
 		lblReturn.setIcon(new ImageIcon(".\\recursos\\return.png"));
 		lblReturn.setHorizontalAlignment(SwingConstants.CENTER);
-		lblReturn.setBounds(10, 370, 45, 45);
+		lblReturn.setBounds(10, 11, 45, 45);
 		contentPane.add(lblReturn);
 
 		lblNombreUsuario = new JLabel(nombreUsuario);
@@ -123,10 +132,11 @@ public class User extends JFrame {
 		lblFondo = new JLabel("");
 		lblFondo.setIcon(new ImageIcon(".\\recursos\\fondo2.jpg"));
 		lblFondo.setBounds(0, 0, 349, 429);
+		setShape(new RoundRectangle2D.Double(0, 0, lblFondo.getWidth(), lblFondo.getHeight(), 50, 50));
 		contentPane.add(lblFondo);
 		DefaultListModel modeloLista = new DefaultListModel();
 		listContactos.setModel(modeloLista);
-
+		
 		vContacto = IoDatos.inicioDeSesion(nombreUsuario);
 
 	}
@@ -148,26 +158,61 @@ public class User extends JFrame {
 			JOptionPane.showMessageDialog(rootPane, "Sesión cerrada.", "Sesión", 3);
 			Main loginFrame = new Main();
 			loginFrame.setVisible(true);
-
 		}
 	}
 
 	private class LblAgendaMouseListener extends MouseAdapter {
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda2.png"));
+			if (!listContactos.isVisible()) {
+				lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda2.png"));
+			} else {
+				lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda.png"));
+			}
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda.png"));
+			if (!listContactos.isVisible()) {
+				lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda.png"));
+			} else {
+				lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda2.png"));
+			}
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			lblAgenda.setVisible(false);
-			btnAdd.setVisible(true);
-			btnRemove.setVisible(true);
+			if (!listContactos.isVisible()) {
+				lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda2.png"));
+				lblAdd.setVisible(true);
+				lblRemove.setVisible(true);
+				listContactos.setVisible(true);
+			} else {
+				lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda.png"));
+				lblAdd.setVisible(false);
+				lblRemove.setVisible(false);
+				listContactos.setVisible(false);
+			}
+		}
+	}
+	private class LblAddMouseListener extends MouseAdapter {
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			lblAdd.setIcon(new ImageIcon(".\\recursos\\add2.png"));
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			lblAdd.setIcon(new ImageIcon(".\\recursos\\add1.png"));
+		}
+	}
+	private class LblRemoveMouseListener extends MouseAdapter {
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			lblRemove.setIcon(new ImageIcon(".\\recursos\\delete2.png"));
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			lblRemove.setIcon(new ImageIcon(".\\recursos\\delete1.png"));
 		}
 	}
 }

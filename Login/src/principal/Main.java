@@ -19,11 +19,14 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.Frame;
 
 public class Main extends JFrame {
 
@@ -55,12 +58,13 @@ public class Main extends JFrame {
 	 * Create the frame.
 	 */
 	public Main() {
+		setResizable(false);
+		setUndecorated(true);
 		setForeground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setTitle("LOGIN");
 		setType(Type.UTILITY);
-		setResizable(false);
-		setBounds(100, 100, 359, 467);
+		setBounds(100, 100, 349, 429);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
@@ -114,6 +118,7 @@ public class Main extends JFrame {
 		passwordFieldPass.setFocusable(false);
 		lblEnter.setToolTipText("Login");
 		lblExit.setToolTipText("Salir");
+		setShape(new RoundRectangle2D.Double(0, 0, lblFondo.getWidth(), lblFondo.getHeight(), 50, 50));
 	}
 
 	private class LblExitMouseListener extends MouseAdapter {
