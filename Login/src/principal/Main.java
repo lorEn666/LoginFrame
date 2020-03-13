@@ -37,6 +37,7 @@ public class Main extends JFrame {
 	private JLabel lblEnter;
 	private JLabel lblExit;
 	private String password;
+	private JLabel lblRegistro;
 
 	/**
 	 * Launch the application.
@@ -72,6 +73,15 @@ public class Main extends JFrame {
 
 		lblExit = new JLabel("");
 		lblExit.addMouseListener(new LblExitMouseListener());
+		
+		lblRegistro = new JLabel("");
+		lblRegistro.setToolTipText("Registrar usuario");
+		lblRegistro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblRegistro.addMouseListener(new LblRegistroMouseListener());
+		lblRegistro.setIcon(new ImageIcon(".\\recursos\\registro.png"));
+		lblRegistro.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRegistro.setBounds(269, 345, 80, 80);
+		contentPane.add(lblRegistro);
 		lblExit.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblExit.setBounds(13, 384, 33, 32);
 		contentPane.add(lblExit);
@@ -252,6 +262,16 @@ public class Main extends JFrame {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				login();
 			}
+		}
+	}
+	private class LblRegistroMouseListener extends MouseAdapter {
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			lblRegistro.setIcon(new ImageIcon(".\\recursos\\registro2.png"));
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			lblRegistro.setIcon(new ImageIcon(".\\recursos\\registro.png"));
 		}
 	}
 }

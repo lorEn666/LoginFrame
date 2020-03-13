@@ -2,7 +2,7 @@ package clases;
 
 import java.io.Serializable;
 
-public class Contacto implements Serializable{
+public class Contacto implements Serializable {
 	private String nombre;
 	private int telefono;
 
@@ -10,13 +10,13 @@ public class Contacto implements Serializable{
 		this.nombre = nombre;
 		this.telefono = telefono;
 	}
-	
+
 	public String getNombre() {
 		return nombre;
 	}
 
 	@Override
 	public String toString() {
-		return nombre + "    " + telefono;
+		return String.format("%-11s %11s", nombre, telefono).trim();
 	}
 }

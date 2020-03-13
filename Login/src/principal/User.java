@@ -10,6 +10,7 @@ import java.awt.Frame;
 import java.awt.Window.Type;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
@@ -37,6 +38,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.UIManager;
 
 public class User extends JFrame {
 
@@ -52,6 +54,8 @@ public class User extends JFrame {
 	private JLabel lblRemove;
 	private JLabel lblAdd;
 	private JTextField textBusqueda;
+	private JLabel lblSearch;
+	private DefaultListCellRenderer renderer;
 
 	/**
 	 * Launch the application.
@@ -73,8 +77,8 @@ public class User extends JFrame {
 	 * Create the frame.
 	 */
 	public User(String nombreUsuario) {
-		setUndecorated(true);
 		setType(Type.UTILITY);
+		setUndecorated(true);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 349, 429);
@@ -93,8 +97,14 @@ public class User extends JFrame {
 		lblAgenda.addMouseListener(new LblAgendaMouseListener());
 
 		listContactos = new JList();
+		listContactos.setFont(new Font("Segoe UI Semilight", Font.PLAIN, 14));
+		listContactos.setSelectionForeground(new Color(153, 51, 51));
+		listContactos.setSelectionBackground(new Color(153, 51, 51));
 		listContactos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listContactos.setVisible(false);
+		renderer = new DefaultListCellRenderer();
+		renderer.setOpaque(false);
+		listContactos.setCellRenderer(renderer);
 
 		lblRemove = new JLabel("");
 		lblRemove.setToolTipText("Eliminar");
@@ -112,9 +122,17 @@ public class User extends JFrame {
 		lblAdd.setVisible(false);
 
 		textBusqueda = new JTextField();
+		textBusqueda.setToolTipText("Buscar contacto");
+		textBusqueda.setHorizontalAlignment(SwingConstants.CENTER);
 		textBusqueda.setVisible(false);
 		textBusqueda.addKeyListener(new TextFieldKeyListener());
-		textBusqueda.setBounds(138, 71, 86, 20);
+
+		lblSearch = new JLabel("");
+		lblSearch.setIcon(new ImageIcon("C:\\Users\\MICAELA\\git\\LoginFrame\\Login\\recursos\\search.png"));
+		lblSearch.setVisible(false);
+		lblSearch.setBounds(111, 61, 30, 30);
+		contentPane.add(lblSearch);
+		textBusqueda.setBounds(151, 64, 86, 26);
 		contentPane.add(textBusqueda);
 		textBusqueda.setColumns(10);
 		lblAdd.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -125,7 +143,7 @@ public class User extends JFrame {
 		lblRemove.setBounds(172, 363, 52, 52);
 		contentPane.add(lblRemove);
 		listContactos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		listContactos.setBorder(null);
+		listContactos.setBorder(UIManager.getBorder("CheckBox.border"));
 		listContactos.setBounds(94, 101, 160, 259);
 		contentPane.add(listContactos);
 		lblAgenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -208,12 +226,14 @@ public class User extends JFrame {
 				listContactos.setVisible(true);
 				textBusqueda.setVisible(true);
 				listContactos.setOpaque(false);
+				lblSearch.setVisible(true);
 			} else {
 				lblAgenda.setIcon(new ImageIcon(".\\recursos\\agenda.png"));
 				lblAdd.setVisible(false);
 				lblRemove.setVisible(false);
 				listContactos.setVisible(false);
 				textBusqueda.setVisible(false);
+				lblSearch.setVisible(false);
 			}
 		}
 	}
@@ -251,10 +271,12 @@ public class User extends JFrame {
 		public void mouseExited(MouseEvent e) {
 			lblRemove.setIcon(new ImageIcon(".\\recursos\\delete1.png"));
 		}
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (listContactos.isSelectionEmpty()) {
-				JOptionPane.showMessageDialog(rootPane, "Debe seleccionar un contacto de la lista.", "Eliminar contacto", 1);
+				JOptionPane.showMessageDialog(rootPane, "Debe seleccionar un contacto de la lista.",
+						"Eliminar contacto", 1);
 				return;
 			}
 			vContacto.remove(listContactos.getSelectedIndex());
