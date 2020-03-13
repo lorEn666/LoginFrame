@@ -10,9 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
-
 import clases.IoDatos;
-
 import javax.swing.JPasswordField;
 import java.awt.Cursor;
 import javax.swing.SwingConstants;
@@ -25,8 +23,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.Dialog.ModalExclusionType;
-import java.awt.Frame;
 
 public class Main extends JFrame {
 
@@ -272,6 +268,13 @@ public class Main extends JFrame {
 		@Override
 		public void mouseExited(MouseEvent e) {
 			lblRegistro.setIcon(new ImageIcon(".\\recursos\\registro.png"));
+		}
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			String nombreUsuario = JOptionPane.showInputDialog(rootPane, "Introduzca nombre del nuevo usuario:", "Registro", 1);
+			String passwordUsuario = JOptionPane.showInputDialog(rootPane, "Introduzca contraseña del nuevo usuario:", "Registro", 1);
+			IoDatos.registroUsuario(nombreUsuario, passwordUsuario);
+			JOptionPane.showMessageDialog(rootPane, "Usuario registrado con éxito", "Registro", 1);
 		}
 	}
 }

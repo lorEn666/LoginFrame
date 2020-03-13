@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -56,6 +58,16 @@ public class IoDatos {
 			guardarContactos.writeObject(vContacto);
 			guardarContactos.close();
 		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+		}
+	}
+	
+	public static void registroUsuario(String nombreUsuario, String passwordUsuario) {
+		try {
+			PrintWriter registro = new PrintWriter(new FileWriter(new File("./datos/users.txt"), true));
+			String linea = nombreUsuario + "-" + passwordUsuario;
+			registro.println(linea);
+			registro.close();
 		} catch (IOException e) {
 		}
 	}

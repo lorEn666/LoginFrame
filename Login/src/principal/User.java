@@ -1,13 +1,10 @@
 package principal;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.Frame;
-import java.awt.Window.Type;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultListCellRenderer;
@@ -22,17 +19,8 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.awt.Cursor;
-import javax.swing.JButton;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
-
 import clases.Contacto;
 import clases.IoDatos;
-
-import javax.swing.JTextArea;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextField;
@@ -128,7 +116,7 @@ public class User extends JFrame {
 		textBusqueda.addKeyListener(new TextFieldKeyListener());
 
 		lblSearch = new JLabel("");
-		lblSearch.setIcon(new ImageIcon("C:\\Users\\MICAELA\\git\\LoginFrame\\Login\\recursos\\search.png"));
+		lblSearch.setIcon(new ImageIcon(".\\recursos\\search.png"));
 		lblSearch.setVisible(false);
 		lblSearch.setBounds(111, 61, 30, 30);
 		contentPane.add(lblSearch);
